@@ -31,6 +31,10 @@ public class Issue implements Comparable<Issue> {
         return author;
     }
 
+    public boolean isOpen() {
+        return open;
+    }
+
     @Override
     public int compareTo(Issue o) {
         Issue issue = (Issue) o;

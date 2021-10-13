@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import ru.netology.domain.Issue;
 import ru.netology.repository.IssueRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +25,7 @@ class IssueManagerTest {
 
     IssueRepository repository = new IssueRepository();
     IssueManager manager = new IssueManager(repository);
+    Collection<Issue> expected = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
@@ -41,39 +44,59 @@ class IssueManagerTest {
 
     @Test
     void shouldShowOpenedIssue() {
-        Issue[] actual = manager.showOpenOrClose(true);
-        Issue[] expected = new Issue[]{book4, book3, book1};
-
-        assertArrayEquals(expected, actual);
+        Collection<Issue> actual = manager.showOpenOrClose(true);
+        expected.addAll(List.of(book4, book3, book1));
+        assertTrue(expected.equals(actual));
 
     }
 
     @Test
     void shouldShowClosedIssue() {
-        Issue[] actual = manager.showOpenOrClose(false);
-        Issue[] expected = new Issue[]{book2};
-        assertArrayEquals(expected, actual);
+        Collection<Issue> actual = manager.showOpenOrClose(false);
+        expected.addAll(List.of(book2));
+        assertTrue(expected.equals(actual));
     }
 
     @Test
-    void shouldFilterByAuthor() {
-        Issue[] actual = manager.filterByAuthor("man");
-        Issue[] expected = new Issue[]{book1};
-        assertArrayEquals(expected, actual);
+    void shouldFilterByExistsAuthor() {
+        Collection<Issue> actual = manager.filterByAuthor("man");
+        expected.addAll(List.of(book1));
+        assertTrue(expected.equals(actual));
     }
 
     @Test
-    void shouldFilterByLabel() {
-        Issue[] actual = manager.filterByLabel("Component: Groovy");
-        Issue[] expected = new Issue[]{book4, book1};
-        assertArrayEquals(expected, actual);
+    void shouldFilterByNotExistsAuthor() {
+        Collection<Issue> actual = manager.filterByAuthor("me");
+        expected.addAll(List.of());
+        assertTrue(expected.equals(actual));
     }
 
     @Test
-    void shouldFilterByAssignee() {
-        Issue[] actual = manager.filterByAssignee("someone");
-        Issue[] expected = new Issue[]{book4, book1};
-        assertArrayEquals(expected, actual);
+    void shouldFilterByExistsLabel() {
+        Collection<Issue> actual = manager.filterByLabel("Component: Groovy");
+        expected.addAll(List.of(book4, book1));
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    void shouldFilterByWithOutLabel() {
+        Collection<Issue> actual = manager.filterByLabel("");
+        expected.addAll(List.of(book3));
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    void shouldFilterByExistsAssignee() {
+        Collection<Issue> actual = manager.filterByAssignee("someone");
+        expected.addAll(List.of(book4, book1));
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    void shouldFilterByNotExistsAssignee() {
+        Collection<Issue> actual = manager.filterByAssignee("me");
+        expected.addAll(List.of());
+        assertTrue(expected.equals(actual));
     }
 
     @Test

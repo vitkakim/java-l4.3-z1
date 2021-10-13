@@ -3,7 +3,7 @@ package ru.netology.manager;
 import ru.netology.domain.Issue;
 import ru.netology.repository.IssueRepository;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class IssueManager {
     private IssueRepository repo;
@@ -17,60 +17,48 @@ public class IssueManager {
         repo.save(item);
     }
 
-    public Issue[] showOpenOrClose(boolean open) {
-        Issue[] result = new Issue[0];
+    public List<Issue> showOpenOrClose(boolean open) {
+        List<Issue> result = new ArrayList<>();
         for (Issue issue : repo.findAll()) {
             if (issue.isOpen() == open) {
-                Issue[] tmp = new Issue[result.length + 1];
-                System.arraycopy(result, 0, tmp, 0, result.length);
-                tmp[tmp.length - 1] = issue;
-                result = tmp;
+                result.add(issue);
             }
         }
-        Arrays.sort(result);
+        Collections.sort(result);
         return result;
     }
 
-    public Issue[] filterByAuthor(String author) {
-        Issue[] result = new Issue[0];
+    public List<Issue> filterByAuthor(String author) {
+        List<Issue> result = new ArrayList<>();
         for (Issue issue : repo.findAll()) {
             if (issue.getAuthor() == author) {
-                Issue[] tmp = new Issue[result.length + 1];
-                System.arraycopy(result, 0, tmp, 0, result.length);
-                tmp[tmp.length - 1] = issue;
-                result = tmp;
+                result.add(issue);
             }
         }
-        Arrays.sort(result);
+        Collections.sort(result);
         return result;
     }
 
-    public Issue[] filterByLabel(String label) {
-        Issue[] result = new Issue[0];
+    public List<Issue> filterByLabel(String label) {
+        List<Issue> result = new ArrayList<>();
         for (Issue issue : repo.findAll()) {
             if (issue.getLabels().contains(label)) {
-                Issue[] tmp = new Issue[result.length + 1];
-                System.arraycopy(result, 0, tmp, 0, result.length);
-                tmp[tmp.length - 1] = issue;
-                result = tmp;
+                result.add(issue);
             }
         }
-        Arrays.sort(result);
+        Collections.sort(result);
         return result;
     }
 
 
-    public Issue[] filterByAssignee(String assignee) {
-        Issue[] result = new Issue[0];
+    public List<Issue> filterByAssignee(String assignee) {
+        List<Issue> result = new ArrayList<>();
         for (Issue issue : repo.findAll()) {
-            if (issue.getAssignee().contains(assignee)) {
-                Issue[] tmp = new Issue[result.length + 1];
-                System.arraycopy(result, 0, tmp, 0, result.length);
-                tmp[tmp.length - 1] = issue;
-                result = tmp;
+            if (issue.getAssignee() == assignee) {
+                result.add(issue);
             }
         }
-        Arrays.sort(result);
+        Collections.sort(result);
         return result;
     }
 
